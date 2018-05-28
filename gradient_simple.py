@@ -3,7 +3,7 @@
 
 import numpy as np
 import sys
-from functions import softmax, cross_entropy_error, _numerical_gradient
+from functions import softmax, cross_entropy_error, numerical_gradient
 
 
 class simpleNet:
@@ -32,4 +32,4 @@ if __name__ == '__main__':
     def f(W):
         return net.loss(x, t)
 
-    print(_numerical_gradient(f, net.W))
+    print(numerical_gradient(f, net.W))

@@ -3,7 +3,7 @@
 
 import numpy as np
 from dataset.mnist import load_mnist
-from TwoLayerNet import TwoLayerNet
+from two_layer_net import TwoLayerNet
 
 (x_train, t_train), (x_test, y_test) = load_mnist(normalize=True)
 
