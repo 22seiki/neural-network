@@ -33,9 +33,11 @@ class TwoLayerNet:
         return cross_entropy_error(y, t)
 
     def accuracy(self, x, t):
-        y = predict(x)
-        y = np.argmax(y, axis=1)
-        t = np.argmax(t, axis=1)
+        y = self.predict(x)
+        if np.ndim(y) > 1:
+            y = np.argmax(y, axis=1)
+        if np.ndim(t) > 1:
+            t = np.argmax(t, axis=1)
 
         accuracy = np.sum(y == t) / float(x.shape[0])
         return accuracy
