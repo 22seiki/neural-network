@@ -11,7 +11,7 @@ class Relu:
 
     def forward(self, x):
         self.mask = (x <= 0)
-        out = copy.copy(x)
+        out = x.copy()
         out[self.mask] = 0
 
         return out
@@ -44,16 +44,22 @@ class Affine:
         self.W = W
         self.b = b
         self.x = None
+        self.original_x_shape = None
         self.dW = None
         self.db = None
 
     def forward(self, x):
+        self.original_x_shape = x.shape
+        x = x.reshape(x.shape[0], -1)
         self.x = x
+
         out = np.dot(x, self.W) + self.b
+
+        return out
 
     def backward(self, dout):
         dx = np.dot(dout, self.W.T)
-        self.dww = np.dot(self.x.T, dout)
+        self.dW = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0)
 
         return dx
@@ -74,7 +80,12 @@ class SoftmaxWithLoss:
 
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
-        dx = (self.y - self.t) / batch_size
+        if self.t.size == self.y.size:
+            dx = (self.y - self.t) / batch_size
+        else:
+            dx = self.y.copy()
+            dx[np.arange(batch_size), self.t] -= 1
+            dx = dx / batch_size
 
         return dx
 
