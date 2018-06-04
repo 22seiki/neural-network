@@ -5,14 +5,15 @@ import numpy as np
 from dataset.mnist import load_mnist
 from two_layer_net import TwoLayerNet
 
-(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True,
+                                                  one_hot_label=True)
 
 train_loss_list = []
 train_acc_list = []
 test_acc_list = []
 
 # ハイパーパラメータ
-iters_num = 10000
+iters_num = 10000  # 繰り返しの回数を適宜設定
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.1
@@ -28,8 +29,8 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 
     # 勾配の計算
-    grad = network.numerical_gradient(x_batch, t_batch)
-
+    # grad = network.numerical_gradient(x_batch, t_batch)
+    grad = network.gradient(x_batch, t_batch)
     # パラメータの更新
     for key in ('W1', 'b1', 'W2', 'b2'):
         network.params[key] -= learning_rate * grad[key]
